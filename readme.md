@@ -2,9 +2,11 @@
 
 ## Technologies Used
 
-- **Frontend**: React (Vite), Tailwind CSS, Redux Toolkit
+- **Frontend**: shadcn-ui, React (Vite), Tailwind CSS, Redux Toolkit
 - **Backend**: Node.js, Express, Cloudinary
 - **Database**: MongoDB
 - **Payment**: PayPal
 
-# Building Currently
+# How to Run it On Your Device
+
+- **On-Going Now**
