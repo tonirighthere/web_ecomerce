@@ -22,11 +22,11 @@ function AuthLogin() {
     dispatch(loginUser(formData)).then((data) => {
       if (data?.payload?.success) {
         toast({
-          title: data?.payload?.message,
+          title: data?.payload?.message , 
         });
       } else {
         toast({
-          title: data?.payload?.message,
+          title: data?.payload?.message || "Server is Not Live Yet, Please Try Again Later",
           variant: "destructive",
         });
       }

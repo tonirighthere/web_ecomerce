@@ -28,7 +28,7 @@ function AuthRegister() {
         navigate("/auth/login");
       } else {
         toast({
-          title: data?.payload?.message,
+          title: data?.payload?.message || "Server is Not Live Yet, Please Try Again Later",
           variant: "destructive",
         });
       }

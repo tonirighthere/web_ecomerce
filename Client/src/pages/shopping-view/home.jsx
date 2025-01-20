@@ -1,7 +1,4 @@
 import { Button } from "@/components/ui/button";
-import bannerOne from "../../assets/banner-1.webp";
-import bannerTwo from "../../assets/banner-2.webp";
-import bannerThree from "../../assets/banner-3.webp";
 import {
   Airplay,
   BabyIcon,
@@ -30,22 +27,39 @@ import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
 import { useToast } from "@/hooks/use-toast";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import { getFeatureImages } from "@/store/common-slice";
+import { LiaTshirtSolid } from "react-icons/lia";
+import { GiTravelDress } from "react-icons/gi";
+import { TbMoodKid } from "react-icons/tb";
+import { BsWatch } from "react-icons/bs";
+import { GiRunningShoe } from "react-icons/gi";
+import { SiNike } from "react-icons/si";
+import { SiAdidas } from "react-icons/si";
+import { SiPuma } from "react-icons/si";
+import Levis from "../../assets/icons/Levis-Symbol.svg";
+import HM from "../../assets/icons/H&M.svg";
+import { SiZara } from "react-icons/si";
 
 const categoriesWithIcon = [
-  { id: "men", label: "Men", icon: ShirtIcon },
-  { id: "women", label: "Women", icon: CloudLightning },
-  { id: "kids", label: "Kids", icon: BabyIcon },
-  { id: "accessories", label: "Accessories", icon: WatchIcon },
-  { id: "footwear", label: "Footwear", icon: UmbrellaIcon },
+  { id: "men", label: "Men's", icon: LiaTshirtSolid },
+  { id: "women", label: "Women's", icon: GiTravelDress },
+  { id: "kids", label: "Kid's", icon: TbMoodKid },
+  { id: "accessories", label: "Accessories", icon: BsWatch },
+  { id: "footwear", label: "Footwear", icon: GiRunningShoe },
 ];
 
 const brandsWithIcon = [
-  { id: "nike", label: "Nike", icon: Shirt },
-  { id: "adidas", label: "Adidas", icon: WashingMachine },
-  { id: "puma", label: "Puma", icon: ShoppingBasket },
-  { id: "levi", label: "Levi's", icon: Airplay },
-  { id: "zara", label: "Zara", icon: Images },
-  { id: "h&m", label: "H&M", icon: Heater },
+  { id: "nike", label: "Nike", icon: SiNike },
+  { id: "adidas", label: "Adidas", icon: SiAdidas },
+  { id: "puma", label: "Puma", icon: SiPuma },
+  {
+    id: "levi",
+    label: "Levi's",
+    icon: () => (
+      <img src={Levis} alt="Levi's" className="w-full h-full object-contain" />
+    ),
+  },
+  { id: "zara", label: "Zara", icon: SiZara },
+  { id: "h&m", label: "H&M" , icon: () => <img src={HM} alt="H&M"  className="w-full h-20 object-contain" /> },
 ];
 function ShoppingHome() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -175,7 +189,7 @@ function ShoppingHome() {
                 className="cursor-pointer hover:shadow-lg transition-shadow"
               >
                 <CardContent className="flex flex-col items-center justify-center p-6">
-                  <categoryItem.icon className="w-12 h-12 mb-4 text-primary" />
+                  <categoryItem.icon className="w-12 h-12 flex items-center justify-center" />
                   <span className="font-bold">{categoryItem.label}</span>
                 </CardContent>
               </Card>
@@ -188,13 +202,14 @@ function ShoppingHome() {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">Shop by Brand</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {brandsWithIcon.map((brandItem) => (
+            {brandsWithIcon.map((brandItem, index) => (
               <Card
+                key={index}
                 onClick={() => handleNavigateToListingPage(brandItem, "brand")}
                 className="cursor-pointer hover:shadow-lg transition-shadow"
               >
                 <CardContent className="flex flex-col items-center justify-center p-6">
-                  <brandItem.icon className="w-12 h-12 mb-4 text-primary" />
+                  <brandItem.icon className="w-16 h-16 mb-4 text-primary" />
                   <span className="font-bold">{brandItem.label}</span>
                 </CardContent>
               </Card>

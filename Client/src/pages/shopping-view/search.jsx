@@ -15,17 +15,19 @@ import { useSearchParams } from "react-router-dom";
 function SearchProducts() {
   const [keyword, setKeyword] = useState("");
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false); // New state
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
   const { searchResults } = useSelector((state) => state.shopSearch);
   const { productDetails } = useSelector((state) => state.shopProducts);
 
   const { user } = useSelector((state) => state.auth);
-
   const { cartItems } = useSelector((state) => state.shopCart);
   const { toast } = useToast();
+
   useEffect(() => {
     if (keyword && keyword.trim() !== "" && keyword.trim().length > 3) {
+      setHasSearched(true); // Mark as searched when typing begins
       setTimeout(() => {
         setSearchParams(new URLSearchParams(`?keyword=${keyword}`));
         dispatch(getSearchResults(keyword));
@@ -97,8 +99,16 @@ function SearchProducts() {
           />
         </div>
       </div>
-      {!searchResults.length ? (
-        <h1 className="text-5xl font-extrabold">No result found!</h1>
+      {!hasSearched && (
+        <p className="text-center text-lg text-muted-foreground m-20">
+          Search for the Products you are Looking for!
+        </p>
+      )}
+      {!searchResults.length && hasSearched ? (
+        <div className="flex justify-center items-center h-40">
+          {/* Add your loading animation here */}
+          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-primary"></div>
+        </div>
       ) : null}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         {searchResults.map((item) => (
