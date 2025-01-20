@@ -1,11 +1,8 @@
 import {
   BadgeCheck,
   ChartNoAxesCombined,
-  Images,
   LayoutDashboard,
   ShoppingBasket,
-  Star,
-  WalletCards,
 } from "lucide-react";
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
@@ -29,24 +26,6 @@ const adminSidebarMenuItems = [
     label: "Orders",
     path: "/admin/orders",
     icon: <BadgeCheck />,
-  },
-  {
-    id: "images",
-    label: "Images",
-    path: "/admin/images",
-    icon: <Images />,
-  },
-  {
-    id: "reviews",
-    label: "Reviews",
-    path: "/admin/reviews",
-    icon:<Star />,
-  },
-  {
-    id: "payments",
-    label: "Payments",
-    path: "/admin/payments",
-    icon: <WalletCards />,
   },
 ];
 

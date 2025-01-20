@@ -10,7 +10,7 @@ export const addNewAddress = createAsyncThunk(
   "/addresses/addNewAddress",
   async (formData) => {
     const response = await axios.post(
-      "https://mern-e-commerce-with-admin-api.onrender.com/api/shop/address/add",
+      `${import.meta.env.VITE_BASEURL_FOR_SERVER}/api/shop/address/add`,
       formData
     );
 
@@ -22,7 +22,7 @@ export const fetchAllAddresses = createAsyncThunk(
   "/addresses/fetchAllAddresses",
   async (userId) => {
     const response = await axios.get(
-      `https://mern-e-commerce-with-admin-api.onrender.com/api/shop/address/get/${userId}`
+      `${import.meta.env.VITE_BASEURL_FOR_SERVER}/api/shop/address/get/${userId}`
     );
 
     return response.data;
@@ -33,7 +33,7 @@ export const editaAddress = createAsyncThunk(
   "/addresses/editaAddress",
   async ({ userId, addressId, formData }) => {
     const response = await axios.put(
-      `https://mern-e-commerce-with-admin-api.onrender.com/api/shop/address/update/${userId}/${addressId}`,
+      `${import.meta.env.VITE_BASEURL_FOR_SERVER}/api/shop/address/update/${userId}/${addressId}`,
       formData
     );
 
@@ -45,7 +45,7 @@ export const deleteAddress = createAsyncThunk(
   "/addresses/deleteAddress",
   async ({ userId, addressId }) => {
     const response = await axios.delete(
-      `https://mern-e-commerce-with-admin-api.onrender.com/api/shop/address/delete/${userId}/${addressId}`
+      `${import.meta.env.VITE_BASEURL_FOR_SERVER}/api/shop/address/delete/${userId}/${addressId}`
     );
 
     return response.data;

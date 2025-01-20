@@ -25,9 +25,11 @@ mongoose
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+
+
 app.use(
   cors({
-    origin: "https://mern-e-commerce-with-admin.onrender.com",
+    origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: [
       "Content-Type",
