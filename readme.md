@@ -1,4 +1,4 @@
-# MERN E-commerce Application (Local)
+# MERN E-commerce Application (Local PC)
 
 ## Technologies Used
 

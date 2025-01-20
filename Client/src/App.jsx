@@ -36,6 +36,7 @@ function App() {
     dispatch(checkAuth());
   }, [dispatch]);
 
+  
   // const user = "user";
   // const isAuthenticated = true;
   // const isLoading = false;
