@@ -100,5 +100,3 @@ npm run dev
 ---
 
 ### ❤️ Made with Love by Dinesh  
-
-Let me know if you'd like further refinements! 😊
