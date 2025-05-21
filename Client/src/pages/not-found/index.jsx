@@ -34,7 +34,7 @@ function NotFound() {
               404
             </CardTitle>
             <CardDescription className="text-gray-500">
-              Oops! We couldn’t find that page.
+              Oops! We couldn’t find that page on D2 Smart Phone.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 px-6 pb-6">

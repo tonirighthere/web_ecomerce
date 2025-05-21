@@ -1,3 +1,3 @@
 export default function AdminPayments() {
-    return <div>payments-admin</div>;
+    return <div>Payments-admin</div>;
 }
