@@ -6,6 +6,7 @@ const cors = require("cors");
 const authRouter = require("./routes/auth/auth-routes");
 const adminProductsRouter = require("./routes/admin/products-routes");
 const adminOrderRouter = require("./routes/admin/order-routes");
+const adminStatsRoutes = require("./routes/admin/admin-stats-routes");
 
 const shopProductsRouter = require("./routes/shop/products-routes");
 const shopCartRouter = require("./routes/shop/cart-routes");
@@ -24,8 +25,19 @@ mongoose
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const allowedOrigins = ["http://localhost:5173"];
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true, // Cho phép gửi credentials (cookies, Authorization header)
+}));
 
-
+app.use(express.json());
 
 app.use(
   cors({
@@ -47,6 +59,7 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductsRouter);
 app.use("/api/admin/orders", adminOrderRouter);
+app.use("/api/admin/stats", adminStatsRoutes);
 
 app.use("/api/shop/products", shopProductsRouter);
 app.use("/api/shop/cart", shopCartRouter);

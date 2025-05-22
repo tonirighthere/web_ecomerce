@@ -1,18 +1,23 @@
-import {
-  BadgeCheck,
-  ChartNoAxesCombined,
-  LayoutDashboard,
-  ShoppingBasket,
-} from "lucide-react";
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
-
+import {
+  LayoutDashboard,
+  ShoppingBasket,
+  BadgeCheck,
+  BarChart2, 
+} from "lucide-react";
 const adminSidebarMenuItems = [
   {
     id: "dashboard",
     label: "Dashboard",
     path: "/admin/dashboard",
+    icon: <LayoutDashboard />,
+  },
+  {
+    id: "features",
+    label: "Features",
+    path: "/admin/features",
     icon: <LayoutDashboard />,
   },
   {
@@ -61,7 +66,7 @@ function AdminSideBar({ open, setOpen }) {
           <div className="flex flex-col h-full">
             <SheetHeader className="border-b">
               <SheetTitle className="flex gap-2 mt-5 mb-5">
-                <ChartNoAxesCombined size={30} />
+                <BarChart2 size={30} />
                 <h1 className="text-2xl font-extrabold">Admin Panel</h1>
               </SheetTitle>
             </SheetHeader>
@@ -74,7 +79,7 @@ function AdminSideBar({ open, setOpen }) {
           onClick={() => navigate("/admin/dashboard")}
           className="flex cursor-pointer items-center gap-2"
         >
-          <ChartNoAxesCombined size={30} />
+          <BarChart2 size={30} />
           <h1 className="text-2xl font-extrabold">Admin Panel</h1>
         </div>
         <MenuItems />
