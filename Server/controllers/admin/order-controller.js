@@ -2,27 +2,45 @@ const Order = require("../../models/Order");
 
 const getAllOrdersOfAllUsers = async (req, res) => {
   try {
-    const orders = await Order.find({});
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
 
-    if (!orders.length) {
+    const totalOrders = await Order.countDocuments();
+    if (totalOrders === 0) {
+      // ✅ Gửi response và return để tránh chạy tiếp bên dưới
       return res.status(404).json({
         success: false,
         message: "No orders found!",
       });
     }
 
-    res.status(200).json({
+    const orders = await Order.find({})
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    // ✅ Gửi response chỉ một lần
+    return res.status(200).json({
       success: true,
       data: orders,
+      pagination: {
+        total: totalOrders,
+        page,
+        totalPages: Math.ceil(totalOrders / limit),
+      },
     });
+
   } catch (e) {
-    console.log(e);
-    res.status(500).json({
+    console.error(e);
+    // ✅ Đảm bảo chỉ có một response
+    return res.status(500).json({
       success: false,
-      message: "Some error occured!",
+      message: "Some error occurred!",
     });
   }
 };
+
 
 const getOrderDetailsForAdmin = async (req, res) => {
   try {

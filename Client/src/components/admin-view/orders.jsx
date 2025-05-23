@@ -18,11 +18,21 @@ import {
   resetOrderDetails,
 } from "@/store/admin/order-slice";
 import { Badge } from "../ui/badge";
+import { useSearchParams } from "react-router-dom";
 
 function AdminOrdersView() {
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
-  const { orderList, orderDetails } = useSelector((state) => state.adminOrder);
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialPage = parseInt(searchParams.get("page")) || 1;
+  const [page, setPage] = useState(initialPage);
+
+  const { orderList, orderDetails, totalPages } = useSelector((state) => state.adminOrder);
+
+  useEffect(() => {
+    dispatch(getAllOrdersForAdmin({ page }));
+  }, [dispatch, page]);
+
 
   function handleFetchOrderDetails(getId) {
     dispatch(getOrderDetailsForAdmin(getId));
@@ -109,6 +119,24 @@ function AdminOrdersView() {
           </TableBody>
         </Table>
       {/* </CardContent> */}
+      <div className="flex justify-center items-center gap-4 mt-6">
+        <Button disabled={page <= 1} onClick={() => {
+          const newPage = page - 1;
+          setPage(newPage);
+          setSearchParams({ page: newPage });
+        }}>
+          Prev
+        </Button>
+        <span>Page {page} / {totalPages}</span>
+        <Button disabled={page >= totalPages} onClick={() => {
+          const newPage = page + 1;
+          setPage(newPage);
+          setSearchParams({ page: newPage });
+        }}>
+          Next
+        </Button>
+      </div>
+
     </Card>
   );
 }
