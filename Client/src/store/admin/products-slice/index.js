@@ -3,7 +3,8 @@ import axios from "axios";
 
 const initialState = {
   isLoading: false,
-  productList: [],
+  productList: [], 
+  totalPages: 1,
 };
 
 export const addNewProduct = createAsyncThunk(
@@ -25,9 +26,9 @@ export const addNewProduct = createAsyncThunk(
 
 export const fetchAllProducts = createAsyncThunk(
   "/products/fetchAllProducts",
-  async () => {
+  async ({ page = 1, limit = 10 }) => {
     const result = await axios.get(
-      `${import.meta.env.VITE_BASEURL_FOR_SERVER}/api/admin/products/get`
+      `${import.meta.env.VITE_BASEURL_FOR_SERVER}/api/admin/products/get?page=${page}&limit=${limit}`
     );
 
     return result?.data;
@@ -74,10 +75,12 @@ const AdminProductsSlice = createSlice({
       .addCase(fetchAllProducts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.productList = action.payload.data;
+        state.totalPages = action.payload.totalPages; // Lưu totalPages từ API
       })
-      .addCase(fetchAllProducts.rejected, (state, action) => {
+      .addCase(fetchAllProducts.rejected, (state) => {
         state.isLoading = false;
         state.productList = [];
+        state.totalPages = 1; // Reset totalPages khi lỗi
       });
   },
 });

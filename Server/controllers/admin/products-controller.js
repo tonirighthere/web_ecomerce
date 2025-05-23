@@ -67,25 +67,18 @@ const addProduct = async (req, res) => {
 
 const fetchAllProducts = async (req, res) => {
   try {
-    // Lấy page và limit từ query, mặc định page=1, limit=10
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
-
-    // Đếm tổng số sản phẩm
     const total = await Product.countDocuments();
-
-    // Lấy sản phẩm theo trang
-    const listOfProducts = await Product.find({})
-      .skip(skip)
-      .limit(limit);
+    const listOfProducts = await Product.find({}).skip(skip).limit(limit);
 
     res.status(200).json({
       success: true,
       data: listOfProducts,
-      total,        // tổng số sản phẩm
-      page,         // trang hiện tại
-      totalPages: Math.ceil(total / limit), // tổng số trang
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
     });
   } catch (e) {
     console.log(e);

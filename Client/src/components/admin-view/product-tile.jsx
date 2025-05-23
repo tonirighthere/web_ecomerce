@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 
 function AdminProductTile({
@@ -8,31 +8,45 @@ function AdminProductTile({
   setCurrentEditedId,
   handleDelete,
   handleView,
+  page = 1, // Trang mặc định là 1
+  totalPages = 1,
+  onPageChange, // Hàm callback để thông báo thay đổi trang cho parent
 }) {
   const [deleteId, setDeleteId] = useState(null);
+  const [inputPage, setInputPage] = useState(page);
+
+  // Đồng bộ inputPage với page từ props
+  useEffect(() => {
+    setInputPage(page);
+  }, [page]);
 
   const handleDeleteClick = (id) => {
-    // Hiển thị hộp thoại xác nhận
     if (window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
       handleDelete(id);
     }
   };
 
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages && newPage !== page) {
+      onPageChange(newPage); // Gọi hàm từ parent để cập nhật trang
+    }
+  };
+
   return (
     <div className="w-full flex justify-center">
-  <div className="w-full max-w-7xl"> {/* tăng max-w-5xl lên max-w-7xl */}
-    <table className="min-w-[1200px] w-full bg-white rounded-lg shadow"> {/* tăng min-w */}
-      <thead className="bg-gray-100">
-        <tr>
-          <th className="px-4 py-2 text-left">Product ID</th>
-          <th className="px-4 py-2 text-left">Name</th>
-          <th className="px-4 py-2 text-left w-[400px]">Description</th> {/* tăng width */}
-          <th className="px-4 py-2 text-left">Image</th>
-          <th className="px-4 py-2 text-left">Price</th>
-          <th className="px-4 py-2 text-left">Total stock</th>
-          <th className="px-4 py-2 text-left">Actions</th>
-        </tr>
-      </thead>
+      <div className="w-full max-w-7xl">
+        <table className="min-w-[1200px] w-full bg-white rounded-lg shadow">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="px-4 py-2 text-left">Product ID</th>
+              <th className="px-4 py-2 text-left">Name</th>
+              <th className="px-4 py-2 text-left w-[400px]">Description</th>
+              <th className="px-4 py-2 text-left">Image</th>
+              <th className="px-4 py-2 text-left">Price</th>
+              <th className="px-4 py-2 text-left">Total stock</th>
+              <th className="px-4 py-2 text-left">Actions</th>
+            </tr>
+          </thead>
           <tbody>
             {products.length === 0 ? (
               <tr>
@@ -97,6 +111,51 @@ function AdminProductTile({
             )}
           </tbody>
         </table>
+        {/* Pagination */}
+        <div className="flex items-center justify-center gap-4 mt-4">
+          <Button
+            className="bg-gray-200 text-black"
+            disabled={page <= 1}
+            onClick={() => handlePageChange(page - 1)}
+          >
+            Prev
+          </Button>
+          <span>
+            Page{" "}
+            <input
+              type="number"
+              min={1}
+              max={totalPages}
+              value={inputPage}
+              onChange={(e) => setInputPage(e.target.value)}
+              onBlur={() => {
+                const num = Number(inputPage);
+                if (num >= 1 && num <= totalPages && num !== page) {
+                  handlePageChange(num); // Gọi hàm chuyển trang
+                } else {
+                  setInputPage(page); // Reset về giá trị hiện tại
+                }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  const num = Number(inputPage);
+                  if (num >= 1 && num <= totalPages && num !== page) {
+                    handlePageChange(num); // Gọi hàm chuyển trang
+                  }
+                }
+              }}
+              className="w-12 text-center border rounded mx-1"
+            />{" "}
+            of {totalPages}
+          </span>
+          <Button
+            className="bg-gray-200 text-black"
+            disabled={page >= totalPages}
+            onClick={() => handlePageChange(page + 1)}
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   );
