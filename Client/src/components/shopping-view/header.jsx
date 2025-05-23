@@ -72,17 +72,21 @@ function HeaderRightContent() {
   const dispatch = useDispatch();
 
   function handleLogout() {
-    // dispatch(logoutUser());
     dispatch(resetTokenAndCredentials());
     sessionStorage.clear();
     navigate("/auth/login");
   }
 
   useEffect(() => {
-    dispatch(fetchCartItems(user?.id));
-  }, [dispatch]);
+    if (user?.id) {
+      dispatch(fetchCartItems(user.id));
+    }
+  }, [dispatch, user]);
 
   console.log(cartItems, "cartItems");
+
+  // Lấy chữ cái đầu tiên của userName hoặc mặc định là "U" nếu không có
+  const userInitial = user?.userName?.[0]?.toUpperCase() || "U";
 
   return (
     <div className="flex lg:items-center lg:flex-row flex-col gap-4">
@@ -113,12 +117,14 @@ function HeaderRightContent() {
         <DropdownMenuTrigger asChild>
           <Avatar className="bg-black">
             <AvatarFallback className="bg-black text-white font-extrabold">
-              {user?.userName[0].toUpperCase()}
+              {userInitial}
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right" className="w-56">
-          <DropdownMenuLabel>Logged in as {user?.userName}</DropdownMenuLabel>
+          <DropdownMenuLabel>
+            Logged in as {user?.userName || "User"}
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => navigate("/shop/account")}>
             <UserCog className="mr-2 h-4 w-4" />

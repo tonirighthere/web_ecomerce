@@ -28,6 +28,9 @@ const OrderSchema = new mongoose.Schema({
   orderUpdateDate: Date,
   paymentId: String,
   payerId: String,
+},
+{
+  timestamps: true, 
 });
 
 module.exports = mongoose.model("Order", OrderSchema);

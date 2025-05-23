@@ -20,6 +20,15 @@ import {
 import { Badge } from "../ui/badge";
 import { useSearchParams } from "react-router-dom";
 
+const ORDER_STATUS_OPTIONS = [
+  { value: "all", label: "All Orders" },
+  { value: "pending", label: "Pending" },
+  { value: "inProcess", label: "In Process" },
+  { value: "inShipping", label: "In Shipping" },
+  { value: "delivered", label: "Delivered" },
+  { value: "rejected", label: "Rejected" },
+];
+
 function AdminOrdersView() {
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const dispatch = useDispatch();
@@ -29,18 +38,24 @@ function AdminOrdersView() {
 
   const { orderList, orderDetails, totalPages } = useSelector((state) => state.adminOrder);
 
+  const initialStatus = searchParams.get("status") || "all";
+  const [statusFilter, setStatusFilter] = useState(initialStatus);
+
   useEffect(() => {
-    dispatch(getAllOrdersForAdmin({ page }));
-  }, [dispatch, page]);
+    const params = { page };
+    if (statusFilter !== "all") {
+      params.status = statusFilter;
+    }
+     dispatch(getAllOrdersForAdmin({ 
+      page,
+      status: statusFilter 
+    }));
+  }, [dispatch, page, statusFilter]);
 
 
   function handleFetchOrderDetails(getId) {
     dispatch(getOrderDetailsForAdmin(getId));
   }
-
-  useEffect(() => {
-    dispatch(getAllOrdersForAdmin());
-  }, [dispatch]);
 
   console.log(orderDetails, "orderList");
 
@@ -51,6 +66,24 @@ function AdminOrdersView() {
   return (
     <Card className="bg-transparent shadow-none">
       {/* <CardContent className="p-4"> */}
+        <div className="mb-4 flex items-center gap-4">
+        <label className="font-medium">Filter by Status:</label>
+        <select
+          className="border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-black"
+          value={statusFilter}
+          onChange={(e) => {
+            setStatusFilter(e.target.value);
+            setPage(1); // Reset về trang 1 khi filter thay đổi
+            setSearchParams({ page: 1, status: e.target.value });
+          }}
+        >
+          {ORDER_STATUS_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
         <Table className="border rounded-xl overflow-hidden shadow bg-white">
           <TableHeader>
             <TableRow className="bg-gray-100">
@@ -123,7 +156,7 @@ function AdminOrdersView() {
         <Button disabled={page <= 1} onClick={() => {
           const newPage = page - 1;
           setPage(newPage);
-          setSearchParams({ page: newPage });
+          setSearchParams({ page: newPage, status: statusFilter });
         }}>
           Prev
         </Button>
@@ -131,10 +164,10 @@ function AdminOrdersView() {
         <Button disabled={page >= totalPages} onClick={() => {
           const newPage = page + 1;
           setPage(newPage);
-          setSearchParams({ page: newPage });
+          setSearchParams({ page: newPage, status: statusFilter });
         }}>
           Next
-        </Button>
+        </Button> 
       </div>
 
     </Card>

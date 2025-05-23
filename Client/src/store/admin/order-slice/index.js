@@ -10,12 +10,19 @@ const initialState = {
 
 
 export const getAllOrdersForAdmin = createAsyncThunk(
-  "/order/getAllOrdersForAdmin",
-  async ({ page }) => {
-    const response = await axios.get(
-      `${import.meta.env.VITE_BASEURL_FOR_SERVER}/api/admin/orders/get?page=${page}`
-    );
-    return response.data;
+  "adminOrder/getAllOrders",
+  async ({ page, status }) => {
+    try {
+      let url = `${import.meta.env.VITE_BASEURL_FOR_SERVER}/api/admin/orders/get?page=${page}`;
+      if (status && status !== 'all') {
+        url += `&status=${status}`;
+      }
+      const response = await axios.get(url);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      throw error;
+    }
   }
 );
 
@@ -49,8 +56,6 @@ const adminOrderSlice = createSlice({
   initialState,
   reducers: {
     resetOrderDetails: (state) => {
-      console.log("resetOrderDetails");
-
       state.orderDetails = null;
     },
   },
@@ -61,10 +66,10 @@ const adminOrderSlice = createSlice({
       })
       .addCase(getAllOrdersForAdmin.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.orderList = action.payload.data;
-        state.totalPages = action.payload.pagination?.totalPages || 1;
+        // Đảm bảo data không bị undefined
+        state.orderList = action.payload?.data || [];
+        state.totalPages = action.payload?.pagination?.totalPages || 1;
       })
-
       .addCase(getAllOrdersForAdmin.rejected, (state) => {
         state.isLoading = false;
         state.orderList = [];
@@ -79,6 +84,13 @@ const adminOrderSlice = createSlice({
       .addCase(getOrderDetailsForAdmin.rejected, (state) => {
         state.isLoading = false;
         state.orderDetails = null;
+      })
+      .addCase(updateOrderStatus.fulfilled, (state, action) => {
+        // Cập nhật orderList trực tiếp nếu cần
+        const updatedOrder = action.payload.data;
+        state.orderList = state.orderList.map((order) =>
+          order._id === updatedOrder._id ? updatedOrder : order
+        );
       });
   },
 });

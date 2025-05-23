@@ -6,6 +6,7 @@ import {
   ShoppingBasket,
   BadgeCheck,
   BarChart2,
+  Users,
 } from "lucide-react";
 
 const adminSidebarMenuItems = [
@@ -32,6 +33,12 @@ const adminSidebarMenuItems = [
     label: "Orders",
     path: "/admin/orders",
     icon: <BadgeCheck />,
+  },
+  {
+    id: "users",
+    label: "Users",
+    path: "/admin/users",
+    icon: <Users />,
   },
 ];
 

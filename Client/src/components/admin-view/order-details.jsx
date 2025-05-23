@@ -11,6 +11,7 @@ import {
   updateOrderStatus,
 } from "@/store/admin/order-slice";
 import { useToast } from "../../hooks/use-toast";
+import { useSearchParams } from "react-router-dom"; // Thêm import này
 
 const initialFormData = {
   status: "",
@@ -21,6 +22,8 @@ function AdminOrderDetailsView({ orderDetails }) {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const { toast } = useToast();
+  const [searchParams] = useSearchParams(); // Lấy searchParams
+  const currentPage = parseInt(searchParams.get("page")) || 1; // Lấy trang hiện tại
 
   function handleUpdateStatus(event) {
     event.preventDefault();
@@ -31,7 +34,7 @@ function AdminOrderDetailsView({ orderDetails }) {
     ).then((data) => {
       if (data?.payload?.success) {
         dispatch(getOrderDetailsForAdmin(orderDetails?._id));
-        dispatch(getAllOrdersForAdmin());
+        dispatch(getAllOrdersForAdmin({ page: currentPage })); // Truyền page hiện tại
         setFormData(initialFormData);
         toast({
           title: data?.payload?.message,
@@ -39,7 +42,6 @@ function AdminOrderDetailsView({ orderDetails }) {
       }
     });
   }
-
   return (
     <DialogContent className="sm:max-w-[600px] w-full max-w-full h-[80vh] overflow-y-auto">
       <div className="grid gap-6">

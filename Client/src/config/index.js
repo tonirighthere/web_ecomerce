@@ -58,11 +58,11 @@ export const addProductFormElements = [
     name: "category",
     componentType: "select",
     options: [
-      { id: "men", label: "Men" },
-      { id: "women", label: "Women" },
-      { id: "kids", label: "Kids" },
-      { id: "accessories", label: "Accessories" },
-      { id: "footwear", label: "Footwear" },
+      { id: "smartphones", label: "Smartphones" },
+      { id: "laptop", label: "Laptop" },
+      { id: "tablets", label: "Tablets" },
+      { id: "smartwatch", label: "Smartwatch" },
+      { id: "headphones", label: "Headphones" },
     ],
   },
   {
@@ -70,12 +70,12 @@ export const addProductFormElements = [
     name: "brand",
     componentType: "select",
     options: [
-      { id: "nike", label: "Nike" },
-      { id: "adidas", label: "Adidas" },
-      { id: "puma", label: "Puma" },
-      { id: "levi", label: "Levi's" },
-      { id: "zara", label: "Zara" },
-      { id: "h&m", label: "H&M" },
+      { id: "apple", label: "Apple" },
+      { id: "samsung", label: "Samsung" },
+      { id: "xiaomi", label: "Xiaomi" },
+      { id: "dell", label: "Dell" },
+      { id: "huawei", label: "Huawei" },
+      { id: "asus", label: "Asus" },
     ],
   },
   {
@@ -131,37 +131,37 @@ export const shoppingViewHeaderMenuItems = [
 ];
 
 export const categoryOptionsMap = {
-  men: "Men",
-  women: "Women",
-  kids: "Kids",
-  accessories: "Accessories",
-  footwear: "Footwear",
+  smartphones: "Smartphones",
+  laptop: "Laptop",
+  tablets: "Tablets",
+  smartwatch: "Smartwatch",
+  headphones: "Headphones",
 };
 
 export const brandOptionsMap = {
-  nike: "Nike",
-  adidas: "Adidas",
-  puma: "Puma",
-  levi: "Levi",
-  zara: "Zara",
-  "h&m": "H&M",
+  apple: "Apple",
+  samsung: "Samsung",
+  xiaomi: "Xiaomi",
+  dell: "Dell",
+  huawei: "Huawei",
+  asus: "Asus",
 };
 
 export const filterOptions = {
   category: [
-    { id: "men", label: "Men" },
-    { id: "women", label: "Women" },
-    { id: "kids", label: "Kids" },
-    { id: "accessories", label: "Accessories" },
-    { id: "footwear", label: "Footwear" },
+    { id: "smartphones", label: "Smartphones" },
+    { id: "laptop", label: "Laptop" },
+    { id: "tablets", label: "Tablets" },
+    { id: "smartwatch", label: "Smartwatch" },
+    { id: "headphones", label: "Headphones" },
   ],
   brand: [
-    { id: "nike", label: "Nike" },
-    { id: "adidas", label: "Adidas" },
-    { id: "puma", label: "Puma" },
-    { id: "levi", label: "Levi's" },
-    { id: "zara", label: "Zara" },
-    { id: "h&m", label: "H&M" },
+    { id: "apple", label: "Apple" },
+    { id: "samsung", label: "Samsung" },
+    { id: "xiaomi", label: "Xiaomi" },
+    { id: "dell", label: "Dell" },
+    { id: "huawei", label: "Huawei" },
+    { id: "asus", label: "Asus" },
   ],
 };
 

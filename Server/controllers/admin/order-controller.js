@@ -4,23 +4,38 @@ const getAllOrdersOfAllUsers = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
+    const status = req.query.status;
     const skip = (page - 1) * limit;
 
-    const totalOrders = await Order.countDocuments();
+    // Tạo query object
+    let query = {};
+    
+    // Thêm điều kiện status nếu có
+    if (status && status !== 'all') {
+      query.orderStatus = status;
+    }
+
+    // Đếm tổng số orders theo điều kiện filter
+    const totalOrders = await Order.countDocuments(query);
+    
     if (totalOrders === 0) {
-      // ✅ Gửi response và return để tránh chạy tiếp bên dưới
-      return res.status(404).json({
-        success: false,
-        message: "No orders found!",
+      return res.status(200).json({
+        success: true,
+        data: [],
+        pagination: {
+          total: 0,
+          page,
+          totalPages: 0,
+        },
       });
     }
 
-    const orders = await Order.find({})
-      .sort({ createdAt: -1 })
+    // Query với filter
+    const orders = await Order.find(query)
+      .sort({ orderDate: -1 })
       .skip(skip)
       .limit(limit);
 
-    // ✅ Gửi response chỉ một lần
     return res.status(200).json({
       success: true,
       data: orders,
@@ -33,13 +48,13 @@ const getAllOrdersOfAllUsers = async (req, res) => {
 
   } catch (e) {
     console.error(e);
-    // ✅ Đảm bảo chỉ có một response
     return res.status(500).json({
       success: false,
       message: "Some error occurred!",
     });
   }
 };
+
 
 
 const getOrderDetailsForAdmin = async (req, res) => {
@@ -84,15 +99,32 @@ const updateOrderStatus = async (req, res) => {
 
     await Order.findByIdAndUpdate(id, { orderStatus });
 
+    // Lấy danh sách đơn hàng mới nhất
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const totalOrders = await Order.countDocuments();
+    const orders = await Order.find({})
+      .sort({ orderDate: -1 })
+      .skip(skip)
+      .limit(limit);
+
     res.status(200).json({
       success: true,
       message: "Order status is updated successfully!",
+      data: orders,
+      pagination: {
+        total: totalOrders,
+        page,
+        totalPages: Math.ceil(totalOrders / limit),
+      },
     });
   } catch (e) {
     console.log(e);
     res.status(500).json({
       success: false,
-      message: "Some error occured!",
+      message: "Some error occurred!",
     });
   }
 };
