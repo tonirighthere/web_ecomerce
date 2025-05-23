@@ -8,14 +8,12 @@ function AdminProductTile({
   setCurrentEditedId,
   handleDelete,
   handleView,
-  page = 1, // Trang mặc định là 1
+  page = 1,
   totalPages = 1,
-  onPageChange, // Hàm callback để thông báo thay đổi trang cho parent
+  onPageChange,
 }) {
-  const [deleteId, setDeleteId] = useState(null);
   const [inputPage, setInputPage] = useState(page);
 
-  // Đồng bộ inputPage với page từ props
   useEffect(() => {
     setInputPage(page);
   }, [page]);
@@ -28,7 +26,7 @@ function AdminProductTile({
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages && newPage !== page) {
-      onPageChange(newPage); // Gọi hàm từ parent để cập nhật trang
+      onPageChange(newPage);
     }
   };
 
@@ -111,51 +109,53 @@ function AdminProductTile({
             )}
           </tbody>
         </table>
-        {/* Pagination */}
-        <div className="flex items-center justify-center gap-4 mt-4">
-          <Button
-            className="bg-gray-200 text-black"
-            disabled={page <= 1}
-            onClick={() => handlePageChange(page - 1)}
-          >
-            Prev
-          </Button>
-          <span>
-            Page{" "}
-            <input
-              type="number"
-              min={1}
-              max={totalPages}
-              value={inputPage}
-              onChange={(e) => setInputPage(e.target.value)}
-              onBlur={() => {
-                const num = Number(inputPage);
-                if (num >= 1 && num <= totalPages && num !== page) {
-                  handlePageChange(num); // Gọi hàm chuyển trang
-                } else {
-                  setInputPage(page); // Reset về giá trị hiện tại
-                }
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
+        {/* Hiển thị phân trang chỉ khi có sản phẩm */}
+        {products.length > 0 && (
+          <div className="flex items-center justify-center gap-4 mt-4">
+            <Button
+              className="bg-gray-200 text-black"
+              disabled={page <= 1}
+              onClick={() => handlePageChange(page - 1)}
+            >
+              Prev
+            </Button>
+            <span>
+              Page{" "}
+              <input
+                type="number"
+                min={1}
+                max={totalPages}
+                value={inputPage}
+                onChange={(e) => setInputPage(e.target.value)}
+                onBlur={() => {
                   const num = Number(inputPage);
                   if (num >= 1 && num <= totalPages && num !== page) {
-                    handlePageChange(num); // Gọi hàm chuyển trang
+                    handlePageChange(num);
+                  } else {
+                    setInputPage(page);
                   }
-                }
-              }}
-              className="w-12 text-center border rounded mx-1"
-            />{" "}
-            of {totalPages}
-          </span>
-          <Button
-            className="bg-gray-200 text-black"
-            disabled={page >= totalPages}
-            onClick={() => handlePageChange(page + 1)}
-          >
-            Next
-          </Button>
-        </div>
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    const num = Number(inputPage);
+                    if (num >= 1 && num <= totalPages && num !== page) {
+                      handlePageChange(num);
+                    }
+                  }
+                }}
+                className="w-12 text-center border rounded mx-1"
+              />{" "}
+              of {totalPages}
+            </span>
+            <Button
+              className="bg-gray-200 text-black"
+              disabled={page >= totalPages}
+              onClick={() => handlePageChange(page + 1)}
+            >
+              Next
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

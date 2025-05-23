@@ -42,19 +42,24 @@ function AdminProducts() {
   const [imageLoadingState, setImageLoadingState] = useState(false);
   const [currentEditedId, setCurrentEditedId] = useState(null);
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const initialPage = parseInt(searchParams.get("page")) || 1;
-  const [page, setPage] = useState(initialPage);
+  
 
   const { productList, totalPages } = useSelector((state) => state.adminProducts);
   const dispatch = useDispatch();
   const { toast } = useToast();
-
+  
+  // Find products
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const initialPage = parseInt(searchParams.get("page")) || 1;
+  const [page, setPage] = useState(initialPage);
+  const initialSearch = searchParams.get("search") || ""; 
+  const [searchQuery, setSearchQuery] = useState(initialSearch); 
+  const [searchTerm, setSearchTerm] = useState(initialSearch); 
 
   useEffect(() => {
-    dispatch(fetchAllProducts({ page })); 
-  }, [dispatch, page]);
+    dispatch(fetchAllProducts({ page, search: searchTerm }));
+  }, [dispatch, page, searchTerm]);
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
@@ -73,7 +78,7 @@ function AdminProducts() {
         })
       ).then((data) => {
         if (data?.payload?.success) {
-          dispatch(fetchAllProducts({ page })); // <-- truyền page hiện tại
+          dispatch(fetchAllProducts({ page, search: searchTerm })); // Thêm search
           setFormData(initialFormData);
           setOpenCreateProductsDialog(false);
           setCurrentEditedId(null);
@@ -86,21 +91,28 @@ function AdminProducts() {
         })
       ).then((data) => {
         if (data?.payload?.success) {
-          dispatch(fetchAllProducts({ page })); // <-- truyền page hiện tại
+          dispatch(fetchAllProducts({ page, search: searchTerm })); // Thêm search
           setOpenCreateProductsDialog(false);
           setImageFile(null);
           setFormData(initialFormData);
           toast({
-            title: "Product add successfully",
+            title: "Product added successfully",
           });
         }
       });
 }
 
+  const handleSearch = () => {
+    setSearchTerm(searchQuery); // Luôn cập nhật searchTerm
+    setPage(1);
+    setSearchParams({ page: 1, search: searchQuery });
+    dispatch(fetchAllProducts({ page: 1, search: searchQuery })); // Gọi API ngay lập tức
+  };
+
   function handleDelete(getCurrentProductId) {
     dispatch(deleteProduct(getCurrentProductId)).then((data) => {
       if (data?.payload?.success) {
-        dispatch(fetchAllProducts({ page })); // <-- truyền page hiện tại
+        dispatch(fetchAllProducts({ page, search: searchTerm })); // Thêm search
       }
     });
   }
@@ -121,7 +133,17 @@ function AdminProducts() {
 
   return (
     <Fragment>
-      <div className="mb-5 w-full flex justify-end red">
+      <div className="mb-5 w-full flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            placeholder="Tìm kiếm sản phẩm..."
+            className="border rounded-lg px-4 py-2 w-64"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <Button onClick={handleSearch}>Tìm kiếm</Button>
+        </div>
         <Button onClick={() => setOpenCreateProductsDialog(true)}>
           Add New Product
         </Button>

@@ -26,11 +26,10 @@ export const addNewProduct = createAsyncThunk(
 
 export const fetchAllProducts = createAsyncThunk(
   "/products/fetchAllProducts",
-  async ({ page = 1, limit = 10 }) => {
+  async ({ page = 1, limit = 10, search = "" }) => {
     const result = await axios.get(
-      `${import.meta.env.VITE_BASEURL_FOR_SERVER}/api/admin/products/get?page=${page}&limit=${limit}`
+      `${import.meta.env.VITE_BASEURL_FOR_SERVER}/api/admin/products/get?page=${page}&limit=${limit}&search=${search}`
     );
-
     return result?.data;
   }
 );
