@@ -60,6 +60,7 @@ const getAdminStats = async (req, res) => {
       sales: value.sales,
     }));
     console.log("Purchase Sales Data:", purchaseSalesData);
+    
 
     res.json({
       totalProducts,

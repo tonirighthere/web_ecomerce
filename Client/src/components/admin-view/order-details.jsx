@@ -55,7 +55,7 @@ function AdminOrderDetailsView({ orderDetails }) {
           </div>
           <div className="flex flex-wrap items-center justify-between gap-4">
             <p className="font-medium">Order Price</p>
-            <Label>₹{orderDetails?.totalAmount}</Label>
+            <Label>${orderDetails?.totalAmount}</Label>
           </div>
           <div className="flex flex-wrap items-center justify-between gap-4">
             <p className="font-medium">Payment Method</p>
@@ -98,7 +98,7 @@ function AdminOrderDetailsView({ orderDetails }) {
                     >
                       <span>Title: {item.title}</span>
                       <span>Quantity: {item.quantity}</span>
-                      <span>Price: ₹{item.price}</span>
+                      <span>Price: ${item.price}</span>
                     </li>
                   ))
                 : null}
@@ -144,7 +144,8 @@ function AdminOrderDetailsView({ orderDetails }) {
         </div>
       </div>
     </DialogContent>
-  );
+  ); 
 }
 
 export default AdminOrderDetailsView;
+

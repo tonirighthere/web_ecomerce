@@ -1,12 +1,13 @@
-import React, { Fragment } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { Fragment, useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 import {
   LayoutDashboard,
   ShoppingBasket,
   BadgeCheck,
-  BarChart2, 
+  BarChart2,
 } from "lucide-react";
+
 const adminSidebarMenuItems = [
   {
     id: "dashboard",
@@ -34,7 +35,7 @@ const adminSidebarMenuItems = [
   },
 ];
 
-function MenuItems({ setOpen }) {
+function MenuItems({ setOpen, activeMenu, setActiveMenu }) {
   const navigate = useNavigate();
 
   return (
@@ -44,11 +45,16 @@ function MenuItems({ setOpen }) {
           key={menuItem.id}
           onClick={() => {
             navigate(menuItem.path);
+            setActiveMenu(menuItem.id); 
             setOpen ? setOpen(false) : null;
           }}
-          className="flex cursor-pointer text-xl items-center gap-2 rounded-md px-3 py-2 text-muted-foreground hover:bg-muted hover:text-foreground"
+          className={`flex cursor-pointer text-lg items-center gap-2 rounded-md px-3 py-2 ${
+            activeMenu === menuItem.id
+              ? "bg-red-500 text-white"
+              : "text-gray-300 hover:bg-gray-700 hover:text-white"
+          }`}
         >
-          {menuItem.icon}
+          <span className="text-xl">{menuItem.icon}</span>
           <span>{menuItem.label}</span>
         </div>
       ))}
@@ -57,32 +63,42 @@ function MenuItems({ setOpen }) {
 }
 
 function AdminSideBar({ open, setOpen }) {
-  const navigate = useNavigate();
+  const location = useLocation();
+  const [activeMenu, setActiveMenu] = useState("dashboard");
 
+  useEffect(() => {
+    // Tìm menu phù hợp với pathname hiện tại
+    const found = adminSidebarMenuItems.find(item => location.pathname.startsWith(item.path));
+    if (found) {
+      setActiveMenu(found.id);
+    }
+  }, [location.pathname]);
   return (
     <Fragment>
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="left" className="w-64">
+        <SheetContent side="left" className="w-64 bg-black text-gray-300">
           <div className="flex flex-col h-full">
-            <SheetHeader className="border-b">
+            <SheetHeader className="border-b border-gray-700">
               <SheetTitle className="flex gap-2 mt-5 mb-5">
-                <BarChart2 size={30} />
-                <h1 className="text-2xl font-extrabold">Admin Panel</h1>
+                <span className="text-2xl font-bold">Admin Panel</span>
               </SheetTitle>
             </SheetHeader>
-            <MenuItems setOpen={setOpen} />
+            <MenuItems
+              setOpen={setOpen}
+              activeMenu={activeMenu}
+              setActiveMenu={setActiveMenu}
+            />
           </div>
         </SheetContent>
       </Sheet>
-      <aside className="hidden w-64 flex-col border-r bg-background p-6 lg:flex">
-        <div
-          onClick={() => navigate("/admin/dashboard")}
-          className="flex cursor-pointer items-center gap-2"
-        >
-          <BarChart2 size={30} />
-          <h1 className="text-2xl font-extrabold">Admin Panel</h1>
+      <aside className="hidden w-64 flex-col bg-black text-gray-300 p-6 lg:flex">
+        <div className="flex cursor-pointer items-center gap-2 mb-8">
+          <span className="text-2xl font-bold">Admin Panel</span>
         </div>
-        <MenuItems />
+        <MenuItems
+          activeMenu={activeMenu}
+          setActiveMenu={setActiveMenu}
+        />
       </aside>
     </Fragment>
   );

@@ -39,44 +39,48 @@ function AdminOrdersView() {
   }, [orderDetails]);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>All Orders</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Table>
+    <Card className="bg-transparent shadow-none">
+      {/* <CardContent className="p-4"> */}
+        <Table className="border rounded-xl overflow-hidden shadow bg-white">
           <TableHeader>
-            <TableRow>
-              <TableHead>Order ID</TableHead>
-              <TableHead>Order Date</TableHead>
-              <TableHead>Order Status</TableHead>
-              <TableHead>Order Price</TableHead>
-              <TableHead>
+            <TableRow className="bg-gray-100">
+              <TableHead className="font-bold text-lg text-left px-6 py-4 text-gray-600">Order ID</TableHead>
+              <TableHead className="font-bold text-lg text-left px-6 py-4 text-gray-600">Order Date</TableHead>
+              <TableHead className="font-bold text-lg text-left px-6 py-4 text-gray-600">Order Status</TableHead>
+              <TableHead className="font-bold text-lg text-left px-6 py-4 text-gray-600">Order Price</TableHead>
+              <TableHead className="font-bold text-lg text-left px-6 py-4 text-gray-600">
                 <span className="sr-only">Details</span>
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {orderList && orderList.length > 0
-              ? orderList.map((orderItem) => (
-                  <TableRow>
-                    <TableCell>{orderItem?._id}</TableCell>
-                    <TableCell>{orderItem?.orderDate.split("T")[0]}</TableCell>
-                    <TableCell>
-                      <Badge
-                        className={`py-1 px-3 ${
-                          orderItem?.orderStatus === "confirmed"
-                            ? "bg-green-500"
-                            : orderItem?.orderStatus === "rejected"
-                            ? "bg-red-600"
-                            : "bg-black"
-                        }`}
-                      >
-                        {orderItem?.orderStatus}
-                      </Badge>
+              ? orderList.map((orderItem, idx) => (
+                  <TableRow
+                    key={orderItem?._id}
+                    className={`${
+                      idx !== orderList.length - 1 ? "border-b" : ""
+                    } ${idx % 2 === 1 ? "bg-gray-50" : "bg-white"}`}
+                  >
+                    <TableCell className="px-6 py-4 text-blue-600 font-semibold align-middle">
+                      #{orderItem?._id?.slice(-6).toUpperCase()}
                     </TableCell>
-                    <TableCell>₹{orderItem?.totalAmount}</TableCell>
-                    <TableCell>
+                    <TableCell className="px-6 py-4 align-middle">{orderItem?.orderDate.split("T")[0]}</TableCell>
+                    <TableCell className="px-6 py-4 align-middle">
+                      <span
+                        className="inline-block bg-black text-white font-semibold rounded-md px-5 py-2 shadow text-base text-center"
+                        style={{ minWidth: 110 }}
+                      >
+                        {orderItem?.orderStatus === "inShipping"
+                          ? "InShipping"
+                          : orderItem?.orderStatus?.charAt(0).toUpperCase() +
+                            orderItem?.orderStatus?.slice(1)}
+                      </span>
+                    </TableCell>
+                    <TableCell className="px-6 py-4 font-bold text-green-700 align-middle">
+                      ${orderItem?.totalAmount}
+                    </TableCell>
+                    <TableCell className="px-6 py-4 align-middle">
                       <Dialog
                         open={openDetailsDialog}
                         onOpenChange={() => {
@@ -85,9 +89,8 @@ function AdminOrdersView() {
                         }}
                       >
                         <Button
-                          onClick={() =>
-                            handleFetchOrderDetails(orderItem?._id)
-                          }
+                          className="bg-black text-white hover:bg-gray-800 font-semibold px-8 py-2 rounded-md text-base shadow"
+                          onClick={() => handleFetchOrderDetails(orderItem?._id)}
                         >
                           View Details
                         </Button>
@@ -96,10 +99,16 @@ function AdminOrdersView() {
                     </TableCell>
                   </TableRow>
                 ))
-              : null}
+              : (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center py-6 text-gray-400">
+                    No orders found.
+                  </TableCell>
+                </TableRow>
+              )}
           </TableBody>
         </Table>
-      </CardContent>
+      {/* </CardContent> */}
     </Card>
   );
 }

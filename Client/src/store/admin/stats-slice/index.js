@@ -1,10 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchAdminStats = createAsyncThunk("adminStats/fetch", async () => {
-  const response = await axios.get("/api/admin/stats");
-  return response.data;
+export const fetchAdminStats = createAsyncThunk("adminStats/fetch", 
+  async () => {
+    const response = await axios.get("http://localhost:5000/api/admin/stats");
+    return response.data; // Trả về dữ liệu để lưu vào Redux state
 });
+
 
 const adminStatsSlice = createSlice({
   name: "adminStats",
@@ -14,7 +16,6 @@ const adminStatsSlice = createSlice({
     builder
       .addCase(fetchAdminStats.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(fetchAdminStats.fulfilled, (state, action) => {
         state.loading = false;
