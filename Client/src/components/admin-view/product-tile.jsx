@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "../ui/button";
+import { formatNumber } from "@/utils/numberFormat";
 
 function AdminProductTile({
   products = [],
@@ -70,8 +71,8 @@ function AdminProductTile({
                     />
                   </td>
                   <td className="px-4 py-2 font-bold">
-                    ${product.salePrice > 0
-                      ? (product.price - (product.price * product.salePrice) / 100).toFixed(2)
+                    {product.salePrice > 0
+                      ? `₫${formatNumber((product.price - (product.price * product.salePrice) / 100))}`
                       : product.price}
                   </td>
                   <td className="px-4 py-2 w-[100px]">{product.stock || product.totalStock}</td>

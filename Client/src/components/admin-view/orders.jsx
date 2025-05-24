@@ -121,7 +121,7 @@ function AdminOrdersView() {
                       </span>
                     </TableCell>
                     <TableCell className="px-6 py-4 font-bold text-green-700 align-middle">
-                      ${orderItem?.totalAmount}
+                      ₫{orderItem?.totalAmount}
                     </TableCell>
                     <TableCell className="px-6 py-4 align-middle">
                       <Dialog

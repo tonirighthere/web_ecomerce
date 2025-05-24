@@ -90,7 +90,7 @@ export const addProductFormElements = [
     name: "salePrice",
     componentType: "input",
     type: "number",
-    placeholder: "Enter sale price (optional)",
+    placeholder: "Enter discount percentage",
   },
   {
     label: "Total Stock",
@@ -148,14 +148,14 @@ export const brandOptionsMap = {
 };
 
 export const filterOptions = {
-  category: [
+  Category: [
     { id: "smartphones", label: "Smartphones" },
     { id: "laptop", label: "Laptop" },
     { id: "tablets", label: "Tablets" },
     { id: "smartwatch", label: "Smartwatch" },
     { id: "headphones", label: "Headphones" },
   ],
-  brand: [
+  Brand: [
     { id: "apple", label: "Apple" },
     { id: "samsung", label: "Samsung" },
     { id: "xiaomi", label: "Xiaomi" },
